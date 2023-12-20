@@ -1,7 +1,8 @@
 import React from "react";
 import { TiDelete } from "react-icons/ti";
+import { FaEdit } from "react-icons/fa";
 
-function LocationList({ data, onDelete }) {
+function LocationList({ data, onDelete, onEdit }) {
   return (
     <section>
       <div>
@@ -14,12 +15,20 @@ function LocationList({ data, onDelete }) {
               <h1 className="font-medium">{location.name}</h1>
               <p>{location.description}</p>
             </div>
-            <button
-              className="btn btn-circle"
-              onClick={() => onDelete(location.name)}
-            >
-              <TiDelete fontSize={20} />
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                className="btn btn-circle"
+                onClick={() => onDelete(location.name)}
+              >
+                <TiDelete fontSize={20} />
+              </button>
+              <button
+                className="btn btn-circle"
+                onClick={() => onEdit(location)}
+              >
+                <FaEdit fontSize={20} />
+              </button>
+            </div>
           </div>
         ))}
       </div>

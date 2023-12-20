@@ -1,12 +1,9 @@
-import LocationsContextProvider from "./contexts/LocationsContext";
 import MainApp from "./pages";
 
 function App() {
   return (
     <div>
-      <LocationsContextProvider>
-        <MainApp />
-      </LocationsContextProvider>
+      <MainApp />
     </div>
   );
 }

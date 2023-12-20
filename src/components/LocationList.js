@@ -1,27 +1,29 @@
 import React from "react";
-import { MdOutlineCancel } from "react-icons/md";
+import { TiDelete } from "react-icons/ti";
 
-function LocationList({ data, handleDelete }) {
+function LocationList({ data, onDelete }) {
   return (
-    <div>
-      {data.map((location) => (
-        <div
-          className="w-full border-2 rounded-md  p-2 my-2 flex items-start justify-between"
-          key={location.name}
-        >
-          <div className="">
-            <h1 className="font-medium">{location.name}</h1>
-            <p>{location.description}</p>
-          </div>
-          <button
-            className="btn btn-circle"
-            onClick={() => handleDelete(location.name)}
+    <section>
+      <div>
+        {data.map((location) => (
+          <div
+            key={location.name}
+            className="border-2 border-gray-100 my-3 p-2 flex items-start rounded-md justify-between gap-8"
           >
-            <MdOutlineCancel fontSize={20} />
-          </button>
-        </div>
-      ))}
-    </div>
+            <div>
+              <h1 className="font-medium">{location.name}</h1>
+              <p>{location.description}</p>
+            </div>
+            <button
+              className="btn btn-circle"
+              onClick={() => onDelete(location.name)}
+            >
+              <TiDelete fontSize={20} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 

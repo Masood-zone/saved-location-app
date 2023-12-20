@@ -1,10 +1,10 @@
 import React from "react";
-import LocationCard from "../components/LocationCard";
+import MainLocation from "../components/MainLocation";
 
 function MainApp() {
   return (
     <div>
-      <LocationCard />
+      <MainLocation />
     </div>
   );
 }

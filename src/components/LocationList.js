@@ -8,7 +8,7 @@ function LocationList({ data, onDelete, onEdit }) {
       <div>
         {data.map((location) => (
           <div
-            key={location.name}
+            key={location.id}
             className="border-2 border-gray-100 my-3 p-2 flex items-start rounded-md justify-between gap-8"
           >
             <div>
@@ -18,7 +18,7 @@ function LocationList({ data, onDelete, onEdit }) {
             <div className="flex items-center gap-4">
               <button
                 className="btn btn-circle"
-                onClick={() => onDelete(location.name)}
+                onClick={() => onDelete(location.id)}
               >
                 <TiDelete fontSize={20} />
               </button>

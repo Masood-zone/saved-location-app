@@ -2,50 +2,55 @@ import React, { useState } from "react";
 import LocationForm from "./LocationForm";
 import { FaPlus } from "react-icons/fa6";
 import LocationList from "./LocationList";
+import { useFormik } from "formik";
+import { v4 as uuidv4 } from "uuid";
+import { locationValidator } from "../schema/locationValidator";
+import { useGeolocated } from "react-geolocated";
 
 function MainLocation() {
   const [locations, setLocations] = useState([]);
   const [showLocations, setShowLocations] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  const [editMode, setEditMode] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    const body = {};
-    for (const [key, value] of form.entries()) {
-      body[key] = value;
-    }
-    setLocations([...locations, body]);
-    setShowLocations(true);
-    e.currentTarget.reset();
+  const { coords } = useGeolocated({
+    positionOptions: {
+      enableHighAccuracy: false,
+    },
+    userDecisionTimeout: 5000,
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      description: "",
+    },
+    validationSchema: locationValidator,
+    onSubmit: (values, { resetForm }) => {
+      const body = {
+        id: uuidv4(),
+        name: values.name,
+        description: values.description,
+        longitude: coords.longitude,
+        latitude: coords.latitude,
+      };
+      setLocations([...locations, body]);
+      console.log(body);
+      setShowLocations(true);
+      resetForm(values);
+    },
+  });
+
+  const handleEdit = (data) => {
+    // setEditMode(true);
+    // const location = locations.find((place) => place === data);
+    // setSelectedLocation(location);
+    // setShowLocations(false);
   };
 
-  const handleDelete = (name) => {
-    const newLocation = locations.filter((place) => place.name !== name);
+  const handleDelete = (id) => {
+    const newLocation = locations.filter((place) => place.id !== id);
     setLocations(newLocation);
   };
 
-  const handleEdit = (data) => {
-    setEditMode(true);
-    const location = locations.find((place) => place === data);
-    setSelectedLocation(location);
-    setShowLocations(false);
-  };
-
-  const handleEditSave = (e, updatedLocation) => {
-    e.preventDefault();
-    if (editMode) {
-      const index = locations.findIndex((place) => place === selectedLocation);
-      const newLocations = [...locations];
-      newLocations[index] = updatedLocation;
-      setLocations(newLocations);
-
-      setEditMode(false);
-      setSelectedLocation(null);
-      setShowLocations(true);
-    }
-  };
   return (
     <div className="w-[50%] h-max mx-auto my-5 flex flex-col items-center justify-center ">
       <section className="flex items-center justify-between gap-10 my-3">
@@ -65,13 +70,7 @@ function MainLocation() {
           onEdit={handleEdit}
         />
       ) : (
-        <LocationForm
-          handleSubmit={handleSubmit}
-          selectedLocation={selectedLocation}
-          editMode={editMode}
-          handleEditSave={handleEditSave}
-          setSelectedLocation={setSelectedLocation}
-        />
+        <LocationForm formik={formik} />
       )}
     </div>
   );
